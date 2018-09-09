@@ -566,7 +566,8 @@ namespace PS4Macro.Classes.Remapping
                 MouseInvertXAxis = MouseInvertXAxis,
                 MouseInvertYAxis = MouseInvertYAxis,
                 LeftMouseMapping = LeftMouseMapping,
-                RightMouseMapping = RightMouseMapping
+                RightMouseMapping = RightMouseMapping,
+                MiddleMouseMapping = MiddleMouseMapping
             };
 
 

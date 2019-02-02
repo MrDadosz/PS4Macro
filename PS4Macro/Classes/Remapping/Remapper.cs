@@ -48,10 +48,10 @@ namespace PS4Macro.Classes.Remapping
         //private const int MOUSE_CENTER_X = 500;
         //private const int MOUSE_CENTER_Y = 500;
         //private const int MOUSE_RELEASE_TIME = 50;
-        private const int MOUSE_SENSITIVITY_DIVISOR = 100000;
+        private const int MOUSE_SENSITIVITY_DIVISOR = 1000;
 
         // Delegates
-        public delegate void OnMouseAxisChangedDelegate(byte x, byte y);
+        public delegate void OnMouseAxisChangedDelegate(int x, int y);
         public OnMouseAxisChangedDelegate OnMouseAxisChanged { get; set; }
 
         public Process RemotePlayProcess { get; set; }
@@ -71,19 +71,22 @@ namespace PS4Macro.Classes.Remapping
         public double MouseSpeedX { get; private set; }
         public double MouseSpeedY { get; private set; }
 
+        public int Counter { get; set; }
         public bool EnableMouseInput { get; set; }
         public bool DebugCursor { get; set; }
         public double MouseSensitivity { get; set; }
         public double MouseDecayRate { get; set; }
         public double MouseDecayThreshold { get; set; }
         public double MouseAnalogDeadzone { get; set; }
-        public double MouseMakeupSpeed { get; set; }
+        public int MouseMakeupSpeed { get; set; }
         public AnalogStick MouseMovementAnalog { get; set; }
         public bool MouseInvertXAxis { get; set; }
         public bool MouseInvertYAxis { get; set; }
         public int LeftMouseMapping { get; set; }
         public int RightMouseMapping { get; set; }
         public int MiddleMouseMapping { get; set; }
+        public double CurrentX { get; set; }
+        public double CurrentY { get; set; }
 
         public MacroPlayer MacroPlayer { get; private set; }
         public bool UsingMacroPlayer { get; private set; }
@@ -98,16 +101,19 @@ namespace PS4Macro.Classes.Remapping
 
             IsCursorShowing = true;
 
+            Counter = 0;
             EnableMouseInput = false;
             DebugCursor = false;
             MouseSensitivity = 1;
-            MouseDecayRate = 1.2;
+            MouseDecayRate = 1;
             MouseDecayThreshold = 0.1;
-            MouseAnalogDeadzone = 14.25;
+            MouseAnalogDeadzone = 5;
             MouseMakeupSpeed = 500;
             MouseMovementAnalog = AnalogStick.Right;
             MouseInvertXAxis = false;
             MouseInvertYAxis = false;
+            CurrentX = 128;
+            CurrentY = 128;
             LeftMouseMapping = 11; // R2
             RightMouseMapping = 10; // L2
             MiddleMouseMapping = 9; // L1
@@ -232,94 +238,46 @@ namespace PS4Macro.Classes.Remapping
                         }
                     }
 
-                    // Mouse moved
-                    if (CurrentMouseStroke != null && CurrentMouseStroke.DidMoved)
+
+                     string analogProperty = MouseMovementAnalog == AnalogStick.Left ? "L" : "R";
+
+                    // Moving mouse
+
+                    // Move mouse to center everytime
+                    if (Counter <= 0)
                     {
-                        MouseSpeedX = (CurrentMouseStroke.VelocityX * MouseSensitivity) / MOUSE_SENSITIVITY_DIVISOR;
-                        if (MouseInvertXAxis) MouseSpeedX *= -1;
+                        double CenteredX = CurrentX - 127.5;
+                        double CenteredY = CurrentY - 127.5;
 
-                        MouseSpeedY = (CurrentMouseStroke.VelocityY * MouseSensitivity) / MOUSE_SENSITIVITY_DIVISOR;
-                        if (MouseInvertYAxis) MouseSpeedY *= -1;
-
-                        CurrentMouseStroke.DidMoved = false;
-
-                        // Stop release timer
-                        //if (MouseReleaseTimer != null)
-                        //{
-                        //    MouseReleaseTimer.Stop();
-                        //    MouseReleaseTimer = null;
-                        //}
+                        CurrentX = CurrentX - ((CenteredX / 1000) * MouseDecayThreshold);
+                        CurrentY = CurrentY - ((CenteredY / 1000) * MouseDecayThreshold);
                     }
-                    // Mouse idle
                     else
                     {
-                        // Start decay
-                        MouseSpeedX /= MouseDecayRate;
-                        MouseSpeedY /= MouseDecayRate;
-
-                        // Stop decaying joystick if below threshold
-                        //if (Math.Abs(MouseSpeedX) < MouseDecayThreshold || Math.Abs(MouseSpeedY) < MouseDecayThreshold)
-                        //{
-                        //    // Reset mouse speed
-                        //    if (Math.Abs(MouseSpeedX) < MouseDecayThreshold) MouseSpeedX = 0;
-                        //    if (Math.Abs(MouseSpeedY) < MouseDecayThreshold) MouseSpeedY = 0;
-
-                        //    // Start release timer
-                        //    if (MouseReleaseTimer == null)
-                        //    {
-                        //        MouseReleaseTimer = new System.Timers.Timer(MOUSE_RELEASE_TIME);
-                        //        MouseReleaseTimer.Start();
-                        //        MouseReleaseTimer.Elapsed += (s, e) =>
-                        //        {
-                        //            // Recenter cursor
-                        //            RemapperUtility.SetCursorPosition(MOUSE_CENTER_X, MOUSE_CENTER_Y);
-
-                        //            // Reset cursor overflow
-                        //            CursorOverflowX = 0;
-                        //            CursorOverflowY = 0;
-
-                        //            // Stop release timer
-                        //            MouseReleaseTimer.Stop();
-                        //            MouseReleaseTimer = null;
-                        //        };
-
-                        //    }
-                        //}
+                        Counter = Math.Max(0, Counter - 1);
                     }
 
-                    const double min = 0;
-                    const double max = 255;
-                    string analogProperty = MouseMovementAnalog == AnalogStick.Left ? "L" : "R";
+                        // Limit borders
+                    if (CurrentX > 255 - MouseAnalogDeadzone)
+                        CurrentX = 255 - MouseAnalogDeadzone;
+                    else if (CurrentX < MouseAnalogDeadzone)
+                        CurrentX = MouseAnalogDeadzone;
 
-                    // Minimum speed
-                    double positiveSpeed = 128 + MouseAnalogDeadzone;
-                    double negativeSpeed = 128 - MouseAnalogDeadzone;
+                    if (CurrentY > 255 - MouseAnalogDeadzone)
+                        CurrentY = 255 - MouseAnalogDeadzone;
+                    else if (CurrentY < MouseAnalogDeadzone)
+                        CurrentY = MouseAnalogDeadzone;
 
-                    // Base speed
-                    double baseX = ((MouseSpeedX > 0) ? positiveSpeed : ((MouseSpeedX < 0) ? negativeSpeed : 128));
-                    double baseY = ((MouseSpeedY > 0) ? positiveSpeed : ((MouseSpeedY < 0) ? negativeSpeed : 128));
+                    // Set values
+                    RemapperUtility.SetValue(CurrentState, analogProperty + "X", CurrentX);
+                    RemapperUtility.SetValue(CurrentState, analogProperty + "Y", CurrentY);
 
-                    // Makeup speed
-                    double makeupX = Math.Sign(MouseSpeedX) * MouseMakeupSpeed;
-                    double makeupY = Math.Sign(MouseSpeedY) * MouseMakeupSpeed;
-
-                    // Scale speed to analog values
-                    double rx = baseX + (makeupX * MouseSpeedX * MouseSpeedX * 127);
-                    double ry = baseY + (makeupY * MouseSpeedY * MouseSpeedY * 127);
-
-                    byte scaledX = (byte)((rx < min) ? min : (rx > max) ? max : rx);
-                    byte scaledY = (byte)((ry < min) ? min : (ry > max) ? max : ry);
-
-                    // Set the analog values
-                    RemapperUtility.SetValue(CurrentState, analogProperty + "X", scaledX);
-                    RemapperUtility.SetValue(CurrentState, analogProperty + "Y", scaledY);
-
-                    // Invoke callback
-                    OnMouseAxisChanged?.Invoke(scaledX, scaledY);
+                    // Invoke callback - set visible icon in settings
+                    OnMouseAxisChanged?.Invoke((int)CurrentX, (int)CurrentY);
                 }
 
-                // Assign the state
-                state = CurrentState;
+            // Assign the state
+            state = CurrentState;
             }
         }
 
@@ -413,6 +371,7 @@ namespace PS4Macro.Classes.Remapping
             if (!EnableMouseInput)
                 return;
 
+            #region Mouse clicks
             // Left mouse
             if (e.MouseState == GlobalMouseHook.MouseState.LeftButtonDown)
             {
@@ -446,15 +405,16 @@ namespace PS4Macro.Classes.Remapping
                 MiddleMouseDown = false;
                 e.Handled = focusedWindow;
             }
-            // Mouse move
+            #endregion
+            #region Mouse move
             else if (e.MouseState == GlobalMouseHook.MouseState.Move)
             {
                 var rawX = e.MouseData.Point.X;
                 var rawY = e.MouseData.Point.Y;
 
-                // Ignore if at center
-                //if (rawX == MOUSE_CENTER_X && rawY == MOUSE_CENTER_Y)
-                //    return;
+                var rawXOld = rawX;
+                var rawYOld = rawY;
+                //Console.Write(rawX);
 
                 #region Store mouse stroke
                 var newStroke = new MouseStroke()
@@ -469,8 +429,57 @@ namespace PS4Macro.Classes.Remapping
                 if (CurrentMouseStroke != null)
                 {
                     double deltaTime = (newStroke.Timestamp - CurrentMouseStroke.Timestamp).TotalSeconds;
-                    newStroke.VelocityX = (newStroke.X - CurrentMouseStroke.X) / deltaTime;
-                    newStroke.VelocityY = (newStroke.Y - CurrentMouseStroke.Y) / deltaTime;
+
+                    if (deltaTime != 0) // moving too fast causes NaN
+                    {
+                        newStroke.VelocityX = (newStroke.X - CurrentMouseStroke.X) / deltaTime;
+                        newStroke.VelocityY = (newStroke.Y - CurrentMouseStroke.Y) / deltaTime;
+                        double newX = newStroke.VelocityX;
+                        double newY = newStroke.VelocityY;
+
+                        // increase lower values to high, because there are problems with PS4's deadzone (center + 64 to slowly moving mouse, center + 63 to not moving mouse)
+
+                        Debug.WriteLine(newX);
+                        if ((newX > -50 && newX < 0) || (newX > 0 && newX < 50))
+                        {
+                            newX = newX * (MouseDecayRate * 80);
+                        }
+                        else if ((newX > -100 && newX < 0) || (newX > 0 && newX < 100))
+                        {
+                            newX = newX * (MouseDecayRate * 70);
+                        }
+                        else if ((newX > -150 && newX < 0) || (newX > 0 && newX < 150))
+                        {
+                            newX = newX * (MouseDecayRate * 30);
+                        }
+                        else if ((newX > -200 && newX < 0) || (newX > 0 && newX < 200))
+                        {
+                            newX = newX * (MouseDecayRate * 10);
+                        }
+
+                        if ((newY > -50 && newY < 0) || (newY > 0 && newY < 50))
+                        {
+                            newY = newY * (MouseDecayRate * 80);
+                        }
+                        else if ((newY > -100 && newY < 0) || (newY > 0 && newY < 100))
+                        {
+                            newY = newY * (MouseDecayRate * 70);
+                        }
+                        else if ((newY > -150 && newY < 0) || (newY > 0 && newY < 150))
+                        {
+                            newY = newY * (MouseDecayRate * 30);
+                        }
+                        else if ((newY > -200 && newY < 0) || (newY > 0 && newY < 200))
+                        {
+                            newY = newY * (MouseDecayRate * 10);
+                        }
+
+                        if (MouseInvertXAxis == true) newX = -newX;
+                        if (MouseInvertYAxis == true) newY = -newY;
+                        CurrentX = CurrentX + ( (newX * MouseSensitivity) / 10000 );
+                        CurrentY = CurrentY + ( (newY * MouseSensitivity) / 10000 );
+                        Counter = MouseMakeupSpeed;
+                    }
                 }
 
                 CurrentMouseStroke = newStroke;
@@ -486,36 +495,37 @@ namespace PS4Macro.Classes.Remapping
                 if (tmpX >= workingArea.Width)
                 {
                     CursorOverflowX += workingArea.Width;
-                    //tmpX = 0;
+                    tmpX = 0;
                     didSetPosition = true;
                 }
                 else if (tmpX <= 0)
                 {
                     CursorOverflowX -= workingArea.Width;
-                    //tmpX = workingArea.Width;
+                    tmpX = workingArea.Width;
                     didSetPosition = true;
                 }
 
                 if (tmpY >= workingArea.Height)
                 {
                     CursorOverflowY += workingArea.Height;
-                    //tmpY = 0;
+                    tmpY = 0;
                     didSetPosition = true;
                 }
                 else if (tmpY <= 0)
                 {
                     CursorOverflowY -= workingArea.Height;
-                    //tmpY = workingArea.Height;
+                    tmpY = workingArea.Height;
                     didSetPosition = true;
                 }
 
                 // Block cursor
                 if (didSetPosition)
                 {
-                    //RemapperUtility.SetCursorPosition(tmpX, tmpY);
+                    RemapperUtility.SetCursorPosition(tmpX, tmpY);
                     e.Handled = true;
                 }
                 #endregion
+            #endregion
             }
         }
 
@@ -566,7 +576,8 @@ namespace PS4Macro.Classes.Remapping
                 MouseInvertXAxis = MouseInvertXAxis,
                 MouseInvertYAxis = MouseInvertYAxis,
                 LeftMouseMapping = LeftMouseMapping,
-                RightMouseMapping = RightMouseMapping
+                RightMouseMapping = RightMouseMapping,
+                MiddleMouseMapping = MiddleMouseMapping
             };
 
 
@@ -591,6 +602,7 @@ namespace PS4Macro.Classes.Remapping
             MouseInvertYAxis = container.MouseInvertYAxis;
             LeftMouseMapping = container.LeftMouseMapping;
             RightMouseMapping = container.RightMouseMapping;
+            MiddleMouseMapping = container.MiddleMouseMapping;
         }
 
         public void CreateActions()

@@ -209,6 +209,16 @@ namespace PS4Macro.Classes.Remapping
         }
         #endregion
 
+        /*#region FreezeMouse
+        [DllImport("user32.dll")]
+        static extern bool ClipCursor(ref RECT lpRect);
+        public static void FreezeMouse()
+        {
+            RECT rect = new RECT(-100000, -100000, 100000, 100000);
+            ClipCursor(ref rect);
+        }
+        #endregion*/
+
         #region ShowSystemCursor
         [Flags]
         public enum SPIF
@@ -416,6 +426,7 @@ namespace PS4Macro.Classes.Remapping
             propertyVal = Convert.ChangeType(propertyVal, targetType);
 
             //Set the value of the property
+            
             propertyInfo.SetValue(inputObject, propertyVal, null);
 
         }

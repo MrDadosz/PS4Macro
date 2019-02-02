@@ -245,7 +245,7 @@ namespace PS4Macro.Forms
             }
         }
 
-        private void OnMouseAxisChanged(byte x, byte y)
+        private void OnMouseAxisChanged(int x, int y)
         {
             float fx = (2 * (x / 255f)) - 1;
             float fy = (2 * (y / 255f)) - 1;
@@ -431,7 +431,7 @@ namespace PS4Macro.Forms
 
         private void makeupSpeedNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            Remapper.MouseMakeupSpeed = (double)makeupSpeedNumericUpDown.Value;
+            Remapper.MouseMakeupSpeed = (int)makeupSpeedNumericUpDown.Value;
         }
 
         private void leftStickRadioButton_CheckedChanged(object sender, EventArgs e)

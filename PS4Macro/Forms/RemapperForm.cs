@@ -276,10 +276,8 @@ namespace PS4Macro.Forms
             // Load mouse input settings
             enableMouseCheckBox.Checked = Remapper.EnableMouseInput;
             sensitivityNumericUpDown.Value = (decimal)Remapper.MouseSensitivity;
-            decayRateNumericUpDown.Value = (decimal)Remapper.MouseDecayRate;
-            decayThresholdNumericUpDown.Value = (decimal)Remapper.MouseDecayThreshold;
-            deadzoneNumericUpDown.Value = (decimal)Remapper.MouseAnalogDeadzone;
-            makeupSpeedNumericUpDown.Value = (decimal)Remapper.MouseMakeupSpeed;
+            frameRefreshNumericUpDown.Value = (decimal)Remapper.FrameRefresh;
+            bordersNumericUpDown.Value = (decimal)Remapper.Borders;
             leftStickRadioButton.Checked = Remapper.MouseMovementAnalog == AnalogStick.Left;
             rightStickRadioButton.Checked = Remapper.MouseMovementAnalog == AnalogStick.Right;
             invertMouseXCheckBox.Checked = Remapper.MouseInvertXAxis;
@@ -414,24 +412,14 @@ namespace PS4Macro.Forms
             Remapper.MouseSensitivity = (double)sensitivityNumericUpDown.Value;
         }
 
-        private void decayRateNumericUpDown_ValueChanged(object sender, EventArgs e)
+        private void frameRefreshNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            Remapper.MouseDecayRate = (double)decayRateNumericUpDown.Value;
+            Remapper.FrameRefresh = (double)frameRefreshNumericUpDown.Value;
         }
 
-        private void decayThresholdNumericUpDown_ValueChanged(object sender, EventArgs e)
+        private void bordersNumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            Remapper.MouseDecayThreshold = (double)decayThresholdNumericUpDown.Value;
-        }
-
-        private void deadzoneNumericUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            Remapper.MouseAnalogDeadzone = (double)deadzoneNumericUpDown.Value;
-        }
-
-        private void makeupSpeedNumericUpDown_ValueChanged(object sender, EventArgs e)
-        {
-            Remapper.MouseMakeupSpeed = (int)makeupSpeedNumericUpDown.Value;
+            Remapper.Borders = (double)bordersNumericUpDown.Value;
         }
 
         private void leftStickRadioButton_CheckedChanged(object sender, EventArgs e)

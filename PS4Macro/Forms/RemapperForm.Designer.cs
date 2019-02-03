@@ -45,8 +45,6 @@
             this.middleMouseLabel = new System.Windows.Forms.Label();
             this.invertMouseYCheckBox = new System.Windows.Forms.CheckBox();
             this.invertMouseXCheckBox = new System.Windows.Forms.CheckBox();
-            this.makeupSpeedNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.makeupSpeedLabel = new System.Windows.Forms.Label();
             this.movementJoystickLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rightStickRadioButton = new System.Windows.Forms.RadioButton();
@@ -56,13 +54,12 @@
             this.leftMouseComboBox = new System.Windows.Forms.ComboBox();
             this.leftMouseLabel = new System.Windows.Forms.Label();
             this.enableMouseCheckBox = new System.Windows.Forms.CheckBox();
-            this.deadzoneNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.decayThresholdNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.decayRateNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.bordersNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.frameRefreshNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.sensitivityNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.deadzoneLabel = new System.Windows.Forms.Label();
+            this.bordersLabel = new System.Windows.Forms.Label();
             this.decayThresholdLabel = new System.Windows.Forms.Label();
-            this.decayRateLabel = new System.Windows.Forms.Label();
+            this.frameRefreshLabel = new System.Windows.Forms.Label();
             this.sensitivityLabel = new System.Windows.Forms.Label();
             this.axisDisplay = new PS4Macro.Controls.AxisDisplay();
             this.macrosGroupBox.SuspendLayout();
@@ -70,11 +67,9 @@
             this.mappingsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mappingsDataGridView)).BeginInit();
             this.mouseInputGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.makeupSpeedNumericUpDown)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.decayThresholdNumericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.decayRateNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bordersNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.frameRefreshNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensitivityNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -189,8 +184,6 @@
             this.mouseInputGroupBox.Controls.Add(this.middleMouseLabel);
             this.mouseInputGroupBox.Controls.Add(this.invertMouseYCheckBox);
             this.mouseInputGroupBox.Controls.Add(this.invertMouseXCheckBox);
-            this.mouseInputGroupBox.Controls.Add(this.makeupSpeedNumericUpDown);
-            this.mouseInputGroupBox.Controls.Add(this.makeupSpeedLabel);
             this.mouseInputGroupBox.Controls.Add(this.axisDisplay);
             this.mouseInputGroupBox.Controls.Add(this.movementJoystickLabel);
             this.mouseInputGroupBox.Controls.Add(this.panel1);
@@ -199,13 +192,12 @@
             this.mouseInputGroupBox.Controls.Add(this.leftMouseComboBox);
             this.mouseInputGroupBox.Controls.Add(this.leftMouseLabel);
             this.mouseInputGroupBox.Controls.Add(this.enableMouseCheckBox);
-            this.mouseInputGroupBox.Controls.Add(this.deadzoneNumericUpDown);
-            this.mouseInputGroupBox.Controls.Add(this.decayThresholdNumericUpDown);
-            this.mouseInputGroupBox.Controls.Add(this.decayRateNumericUpDown);
+            this.mouseInputGroupBox.Controls.Add(this.bordersNumericUpDown);
+            this.mouseInputGroupBox.Controls.Add(this.frameRefreshNumericUpDown);
             this.mouseInputGroupBox.Controls.Add(this.sensitivityNumericUpDown);
-            this.mouseInputGroupBox.Controls.Add(this.deadzoneLabel);
+            this.mouseInputGroupBox.Controls.Add(this.bordersLabel);
             this.mouseInputGroupBox.Controls.Add(this.decayThresholdLabel);
-            this.mouseInputGroupBox.Controls.Add(this.decayRateLabel);
+            this.mouseInputGroupBox.Controls.Add(this.frameRefreshLabel);
             this.mouseInputGroupBox.Controls.Add(this.sensitivityLabel);
             this.mouseInputGroupBox.Location = new System.Drawing.Point(358, 34);
             this.mouseInputGroupBox.Name = "mouseInputGroupBox";
@@ -254,28 +246,6 @@
             this.invertMouseXCheckBox.Text = "Invert X-Axis";
             this.invertMouseXCheckBox.UseVisualStyleBackColor = true;
             this.invertMouseXCheckBox.CheckedChanged += new System.EventHandler(this.invertMouseXCheckBox_CheckedChanged);
-            // 
-            // makeupSpeedNumericUpDown
-            // 
-            this.makeupSpeedNumericUpDown.Location = new System.Drawing.Point(132, 162);
-            this.makeupSpeedNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.makeupSpeedNumericUpDown.Name = "makeupSpeedNumericUpDown";
-            this.makeupSpeedNumericUpDown.Size = new System.Drawing.Size(56, 20);
-            this.makeupSpeedNumericUpDown.TabIndex = 17;
-            this.makeupSpeedNumericUpDown.ValueChanged += new System.EventHandler(this.makeupSpeedNumericUpDown_ValueChanged);
-            // 
-            // makeupSpeedLabel
-            // 
-            this.makeupSpeedLabel.AutoSize = true;
-            this.makeupSpeedLabel.Location = new System.Drawing.Point(9, 164);
-            this.makeupSpeedLabel.Name = "makeupSpeedLabel";
-            this.makeupSpeedLabel.Size = new System.Drawing.Size(66, 13);
-            this.makeupSpeedLabel.TabIndex = 16;
-            this.makeupSpeedLabel.Text = "Center delay";
             // 
             // movementJoystickLabel
             // 
@@ -368,117 +338,100 @@
             this.enableMouseCheckBox.UseVisualStyleBackColor = true;
             this.enableMouseCheckBox.CheckedChanged += new System.EventHandler(this.enableMouseCheckBox_CheckedChanged);
             // 
-            // deadzoneNumericUpDown
+            // bordersNumericUpDown
             // 
-            this.deadzoneNumericUpDown.Location = new System.Drawing.Point(132, 136);
-            this.deadzoneNumericUpDown.Name = "deadzoneNumericUpDown";
-            this.deadzoneNumericUpDown.Size = new System.Drawing.Size(56, 20);
-            this.deadzoneNumericUpDown.TabIndex = 8;
-            this.deadzoneNumericUpDown.Value = new decimal(new int[] {
+            this.bordersNumericUpDown.Location = new System.Drawing.Point(132, 136);
+            this.bordersNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.bordersNumericUpDown.Name = "bordersNumericUpDown";
+            this.bordersNumericUpDown.Size = new System.Drawing.Size(56, 20);
+            this.bordersNumericUpDown.TabIndex = 8;
+            this.bordersNumericUpDown.Value = new decimal(new int[] {
             5,
             0,
             0,
             0});
-            this.deadzoneNumericUpDown.ValueChanged += new System.EventHandler(this.deadzoneNumericUpDown_ValueChanged);
+            this.bordersNumericUpDown.ValueChanged += new System.EventHandler(this.bordersNumericUpDown_ValueChanged);
             // 
-            // decayThresholdNumericUpDown
+            // frameRefreshNumericUpDown
             // 
-            this.decayThresholdNumericUpDown.DecimalPlaces = 2;
-            this.decayThresholdNumericUpDown.Location = new System.Drawing.Point(132, 110);
-            this.decayThresholdNumericUpDown.Maximum = new decimal(new int[] {
+            this.frameRefreshNumericUpDown.Location = new System.Drawing.Point(132, 105);
+            this.frameRefreshNumericUpDown.Maximum = new decimal(new int[] {
             500,
             0,
             0,
             0});
-            this.decayThresholdNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.decayThresholdNumericUpDown.Name = "decayThresholdNumericUpDown";
-            this.decayThresholdNumericUpDown.Size = new System.Drawing.Size(56, 20);
-            this.decayThresholdNumericUpDown.TabIndex = 6;
-            this.decayThresholdNumericUpDown.Value = new decimal(new int[] {
+            this.frameRefreshNumericUpDown.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.decayThresholdNumericUpDown.ValueChanged += new System.EventHandler(this.decayThresholdNumericUpDown_ValueChanged);
-            // 
-            // decayRateNumericUpDown
-            // 
-            this.decayRateNumericUpDown.DecimalPlaces = 2;
-            this.decayRateNumericUpDown.Location = new System.Drawing.Point(132, 84);
-            this.decayRateNumericUpDown.Maximum = new decimal(new int[] {
-            500,
+            this.frameRefreshNumericUpDown.Name = "frameRefreshNumericUpDown";
+            this.frameRefreshNumericUpDown.Size = new System.Drawing.Size(56, 20);
+            this.frameRefreshNumericUpDown.TabIndex = 4;
+            this.frameRefreshNumericUpDown.Value = new decimal(new int[] {
+            30,
             0,
             0,
             0});
-            this.decayRateNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.decayRateNumericUpDown.Name = "decayRateNumericUpDown";
-            this.decayRateNumericUpDown.Size = new System.Drawing.Size(56, 20);
-            this.decayRateNumericUpDown.TabIndex = 4;
-            this.decayRateNumericUpDown.Value = new decimal(new int[] {
-            12,
-            0,
-            0,
-            65536});
-            this.decayRateNumericUpDown.ValueChanged += new System.EventHandler(this.decayRateNumericUpDown_ValueChanged);
+            this.frameRefreshNumericUpDown.ValueChanged += new System.EventHandler(this.frameRefreshNumericUpDown_ValueChanged);
             // 
             // sensitivityNumericUpDown
             // 
             this.sensitivityNumericUpDown.DecimalPlaces = 2;
-            this.sensitivityNumericUpDown.Location = new System.Drawing.Point(132, 58);
+            this.sensitivityNumericUpDown.Location = new System.Drawing.Point(132, 74);
             this.sensitivityNumericUpDown.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
+            this.sensitivityNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
             this.sensitivityNumericUpDown.Name = "sensitivityNumericUpDown";
             this.sensitivityNumericUpDown.Size = new System.Drawing.Size(56, 20);
             this.sensitivityNumericUpDown.TabIndex = 2;
             this.sensitivityNumericUpDown.Value = new decimal(new int[] {
-            3,
+            1,
             0,
             0,
             0});
             this.sensitivityNumericUpDown.ValueChanged += new System.EventHandler(this.sensitivityNumericUpDown_ValueChanged);
             // 
-            // deadzoneLabel
+            // bordersLabel
             // 
-            this.deadzoneLabel.AutoSize = true;
-            this.deadzoneLabel.Location = new System.Drawing.Point(9, 138);
-            this.deadzoneLabel.Name = "deadzoneLabel";
-            this.deadzoneLabel.Size = new System.Drawing.Size(43, 13);
-            this.deadzoneLabel.TabIndex = 7;
-            this.deadzoneLabel.Text = "Borders";
+            this.bordersLabel.AutoSize = true;
+            this.bordersLabel.Location = new System.Drawing.Point(9, 138);
+            this.bordersLabel.Name = "bordersLabel";
+            this.bordersLabel.Size = new System.Drawing.Size(78, 13);
+            this.bordersLabel.TabIndex = 7;
+            this.bordersLabel.Text = "Borders (pixels)";
             // 
             // decayThresholdLabel
             // 
-            this.decayThresholdLabel.AutoSize = true;
-            this.decayThresholdLabel.Location = new System.Drawing.Point(9, 112);
+            this.decayThresholdLabel.Location = new System.Drawing.Point(0, 0);
             this.decayThresholdLabel.Name = "decayThresholdLabel";
-            this.decayThresholdLabel.Size = new System.Drawing.Size(127, 13);
-            this.decayThresholdLabel.TabIndex = 5;
-            this.decayThresholdLabel.Text = "Mouse centering multipler";
+            this.decayThresholdLabel.Size = new System.Drawing.Size(100, 23);
+            this.decayThresholdLabel.TabIndex = 22;
             // 
-            // decayRateLabel
+            // frameRefreshLabel
             // 
-            this.decayRateLabel.AutoSize = true;
-            this.decayRateLabel.Location = new System.Drawing.Point(9, 86);
-            this.decayRateLabel.Name = "decayRateLabel";
-            this.decayRateLabel.Size = new System.Drawing.Size(111, 13);
-            this.decayRateLabel.TabIndex = 3;
-            this.decayRateLabel.Text = "Lower values multipler";
+            this.frameRefreshLabel.AutoSize = true;
+            this.frameRefreshLabel.Location = new System.Drawing.Point(9, 107);
+            this.frameRefreshLabel.Name = "frameRefreshLabel";
+            this.frameRefreshLabel.Size = new System.Drawing.Size(103, 13);
+            this.frameRefreshLabel.TabIndex = 3;
+            this.frameRefreshLabel.Text = "Mouse frame refresh";
             // 
             // sensitivityLabel
             // 
             this.sensitivityLabel.AutoSize = true;
-            this.sensitivityLabel.Location = new System.Drawing.Point(9, 60);
+            this.sensitivityLabel.Location = new System.Drawing.Point(9, 76);
             this.sensitivityLabel.Name = "sensitivityLabel";
             this.sensitivityLabel.Size = new System.Drawing.Size(54, 13);
             this.sensitivityLabel.TabIndex = 1;
@@ -517,12 +470,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.mappingsDataGridView)).EndInit();
             this.mouseInputGroupBox.ResumeLayout(false);
             this.mouseInputGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.makeupSpeedNumericUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.deadzoneNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.decayThresholdNumericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.decayRateNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bordersNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.frameRefreshNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sensitivityNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
@@ -543,13 +494,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Key;
         private System.Windows.Forms.GroupBox mouseInputGroupBox;
         private System.Windows.Forms.Label sensitivityLabel;
-        private System.Windows.Forms.Label decayThresholdLabel;
-        private System.Windows.Forms.Label decayRateLabel;
-        private System.Windows.Forms.Label deadzoneLabel;
+        private System.Windows.Forms.Label frameRefreshLabel;
+        private System.Windows.Forms.Label bordersLabel;
         private System.Windows.Forms.CheckBox enableMouseCheckBox;
-        private System.Windows.Forms.NumericUpDown deadzoneNumericUpDown;
-        private System.Windows.Forms.NumericUpDown decayThresholdNumericUpDown;
-        private System.Windows.Forms.NumericUpDown decayRateNumericUpDown;
+        private System.Windows.Forms.NumericUpDown bordersNumericUpDown;
+        private System.Windows.Forms.NumericUpDown frameRefreshNumericUpDown;
         private System.Windows.Forms.NumericUpDown sensitivityNumericUpDown;
         private System.Windows.Forms.ComboBox rightMouseComboBox;
         private System.Windows.Forms.Label rightMouseLabel;
@@ -560,11 +509,10 @@
         private System.Windows.Forms.RadioButton rightStickRadioButton;
         private System.Windows.Forms.RadioButton leftStickRadioButton;
         private Controls.AxisDisplay axisDisplay;
-        private System.Windows.Forms.NumericUpDown makeupSpeedNumericUpDown;
-        private System.Windows.Forms.Label makeupSpeedLabel;
         private System.Windows.Forms.CheckBox invertMouseYCheckBox;
         private System.Windows.Forms.CheckBox invertMouseXCheckBox;
         private System.Windows.Forms.ComboBox middleMouseComboBox;
         private System.Windows.Forms.Label middleMouseLabel;
+        private System.Windows.Forms.Label decayThresholdLabel;
     }
 }
